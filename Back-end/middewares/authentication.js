@@ -6,7 +6,12 @@ import bcrypt from "bcrypt";
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized - Missing token - You need to login to go further!" });
+    return res
+      .status(401)
+      .json({
+        error:
+          "Unauthorized - Missing token - You need to login to go further!",
+      });
   }
 
   try {
@@ -60,7 +65,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { _id: user._id, role: user.role , email, name: user.name},
+      { _id: user._id, role: user.role, email, name: user.name },
       process.env.SECRET_TOKEN,
       {
         expiresIn: "24h",
@@ -74,13 +79,26 @@ export const login = async (req, res) => {
         sameSite: "None",
       })
       .status(200)
-      .json({ message: "Login successful", data: user , token});
+      .json({ message: "Login successful", data: user, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+export const loggedInUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json({ user }).status(200);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error.message);
+  }
+};
 
 export const logOut = (req, res) => {
   return res

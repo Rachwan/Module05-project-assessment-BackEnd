@@ -1,6 +1,6 @@
 import express from 'express'
-import { orderController } from '../controllers/OrderController'
-import { verifyToken, checkRole } from '../Middlewares/authentication.js'
+import { orderController } from '../controllers/OrderController.js'
+import { verifyToken, checkRole } from '../middewares/authentication.js'
 
 const orderRoutes = express.Router()
 

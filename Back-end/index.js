@@ -7,7 +7,9 @@ import cors from "cors";
 
 import { userRoutes } from './routes/UserRoutes.js';
 import productRoutes from './routes/ProductRoutes.js';
-import { login } from './middewares/authentication.js';
+import orderRoutes  from './routes/OrderRoutes.js'
+
+import { loggedInUser, login, verifyToken } from './middewares/authentication.js';
 import { logOut } from './middewares/authentication.js';
 
 
@@ -23,12 +25,12 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-// const corsOption = {
-//   origin: "http://localhost:5173",
-//   credentials: true,
-//   optionsSuccessStatus: 200,
-// };
-app.use(cors());
+const corsOption = {
+  origin: "http://localhost:3000",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOption));
 
 app.use(cookieParser());
 app.use(express.json())
@@ -53,8 +55,10 @@ connectDB()
 
 app.use('/user', userRoutes);
 app.use('/product', productRoutes)
+app.use('/order', orderRoutes)
 
 app.post("/login", login);
 app.post("/logout", logOut);
+app.get("/logged-in-user", verifyToken, loggedInUser);
 
 app.use('/images', express.static('images'))

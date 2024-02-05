@@ -76,7 +76,7 @@ export const productController = {
   editProduct: async (req, res) => {
     const id = req.body._id;
     const updatedFields = { ...req.body };
-    // delete updatedFields._id;
+    delete updatedFields._id;
 
     const editedProduct = await Product.findById(id);
     if (req.file) {
