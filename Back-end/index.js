@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import { userRoutes } from './routes/UserRoutes.js';
+import productRoutes from './routes/ProductRoutes.js';
 import { login } from './middewares/authentication.js';
 import { logOut } from './middewares/authentication.js';
 
@@ -51,6 +52,9 @@ app.listen(PORT, (error) =>{
 connectDB()
 
 app.use('/user', userRoutes);
+app.use('/product', productRoutes)
 
 app.post("/login", login);
 app.post("/logout", logOut);
+
+app.use('/images', express.static('images'))
